@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import socket
 import voluptuous as vol
 
@@ -10,6 +11,8 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_NAME
 
 from .const import DOMAIN, DEFAULT_PORT, DEFAULT_NAME
+
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_validate_connection(hass: HomeAssistant, host: str, port: int) -> dict:
