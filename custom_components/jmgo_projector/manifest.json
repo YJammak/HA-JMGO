@@ -1,0 +1,12 @@
+{
+  "domain": "jmgo_projector",
+  "name": "JMGO Projector",
+  "codeowners": [],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/example/jmgo-projector",
+  "issue_tracker": "https://github.com/example/jmgo-projector/issues",
+  "iot_class": "local_push",
+  "version": "1.0.0",
+  "requirements": []
+}

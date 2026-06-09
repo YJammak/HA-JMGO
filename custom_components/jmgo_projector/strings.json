@@ -1,0 +1,44 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "JMGO Projector Setup",
+        "description": "Enter the connection details for your JMGO projector",
+        "data": {
+          "host": "IP Address",
+          "port": "Port",
+          "name": "Name"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to projector",
+      "unknown": "Unknown error"
+    },
+    "abort": {
+      "already_configured": "Projector already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "JMGO Projector Options",
+        "description": "Modify the connection settings for your JMGO projector",
+        "data": {
+          "host": "IP Address",
+          "port": "Port",
+          "name": "Name"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to projector with new settings"
+    }
+  },
+  "state": {
+    "_": {
+      "on": "On",
+      "off": "Off"
+    }
+  }
+}

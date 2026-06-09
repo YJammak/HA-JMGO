@@ -1,0 +1,26 @@
+send_key:
+  name: Send Key
+  description: Send a key press to the JMGO projector
+  target:
+    entity:
+      integration: jmgo_projector
+      domain: media_player
+  fields:
+    key:
+      name: Key
+      description: The key to press
+      required: true
+      example: "ok"
+      selector:
+        select:
+          options:
+            - power
+            - mongo
+            - return
+            - setting
+            - ok
+            - up
+            - down
+            - left
+            - right
+            - option

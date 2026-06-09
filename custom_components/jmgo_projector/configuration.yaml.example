@@ -1,0 +1,179 @@
+# JMGO 坚果投影仪 Home Assistant 集成 - YAML 配置示例
+
+# 基础配置（最小配置）
+media_player:
+  - platform: jmgo_projector
+    host: 192.168.1.100  # 替换为你的投影仪 IP 地址
+    # port 和 name 为可选参数，默认值如下：
+    # port: 9005
+    # name: JMGO Projector
+
+# 完整配置示例
+media_player:
+  - platform: jmgo_projector
+    host: 192.168.1.100
+    port: 9005
+    name: 客厅投影仪
+
+# 多个投影仪配置
+media_player:
+  - platform: jmgo_projector
+    host: 192.168.1.100
+    name: 客厅投影仪
+  - platform: jmgo_projector
+    host: 192.168.1.101
+    name: 卧室投影仪
+
+# 配合自动化使用示例
+automation:
+  # 开机后自动调整音量到舒适水平
+  - alias: "投影仪开机音量设置"
+    trigger:
+      platform: state
+      entity_id: media_player.ke_ting_tou_ying_yi
+      to: "on"
+    action:
+      service: media_player.volume_set
+      target:
+        entity_id: media_player.ke_ting_tou_ying_yi
+      data:
+        volume_level: 0.3  # 30% 音量
+
+  # 观影模式 - 关灯并开启投影仪
+  - alias: "观影模式"
+    trigger:
+      platform: state
+      entity_id: input_boolean.movie_mode
+      to: "on"
+    action:
+      - service: light.turn_off
+        target:
+          entity_id: light.ke_ting
+      - service: media_player.turn_on
+        target:
+          entity_id: media_player.ke_ting_tou_ying_yi
+      - delay: "00:00:05"  # 等待投影仪启动
+      - service: jmgo_projector.send_key
+        target:
+          entity_id: media_player.ke_ting_tou_ying_yi
+        data:
+          key: mongo  # 打开菜单选择应用
+
+  # 退出观影模式
+  - alias: "退出观影模式"
+    trigger:
+      platform: state
+      entity_id: input_boolean.movie_mode
+      to: "off"
+    action:
+      - service: media_player.turn_off
+        target:
+          entity_id: media_player.ke_ting_tou_ying_yi
+      - delay: "00:00:02"
+      - service: light.turn_on
+        target:
+          entity_id: light.ke_ting
+
+  # 定时关机提醒（关机前5分钟提醒）
+  - alias: "投影仪定时关机提醒"
+    trigger:
+      platform: time
+      at: "22:55:00"
+    condition:
+      condition: state
+      entity_id: media_player.ke_ting_tou_ying_yi
+      state: "on"
+    action:
+      service: tts.speak
+      target:
+        entity_id: tts.google_translate
+      data:
+        message: "投影仪将在5分钟后自动关机"
+
+  # 遥控器方向键映射（假设你有物理遥控器）
+  - alias: "投影仪上键"
+    trigger:
+      platform: event
+      event_type: zha_event
+      event_data:
+        device_ieee: "00:11:22:33:44:55:66:77"  # 你的遥控器 IEEE 地址
+        command: "up"
+    action:
+      service: jmgo_projector.send_key
+      target:
+        entity_id: media_player.ke_ting_tou_ying_yi
+      data:
+        key: up
+
+  - alias: "投影仪下键"
+    trigger:
+      platform: event
+      event_type: zha_event
+      event_data:
+        device_ieee: "00:11:22:33:44:55:66:77"
+        command: "down"
+    action:
+      service: jmgo_projector.send_key
+      target:
+        entity_id: media_player.ke_ting_tou_ying_yi
+      data:
+        key: down
+
+  - alias: "投影仪确认键"
+    trigger:
+      platform: event
+      event_type: zha_event
+      event_data:
+        device_ieee: "00:11:22:33:44:55:66:77"
+        command: "ok"
+    action:
+      service: jmgo_projector.send_key
+      target:
+        entity_id: media_player.ke_ting_tou_ying_yi
+      data:
+        key: ok
+
+# 脚本示例
+script:
+  # 打开投影仪并进入指定应用
+  projector_start_app:
+    alias: "启动投影仪应用"
+    sequence:
+      - service: media_player.turn_on
+        target:
+          entity_id: media_player.ke_ting_tou_ying_yi
+      - delay: "00:00:05"  # 等待投影仪启动
+      - service: jmgo_projector.send_key
+        target:
+          entity_id: media_player.ke_ting_tou_ying_yi
+        data:
+          key: mongo  # 打开菜单
+      - delay: "00:00:02"
+      - repeat:
+          count: 2
+          sequence:
+            - service: jmgo_projector.send_key
+              target:
+                entity_id: media_player.ke_ting_tou_ying_yi
+              data:
+                key: down
+            - delay: "00:00:01"
+      - service: jmgo_projector.send_key
+        target:
+          entity_id: media_player.ke_ting_tou_ying_yi
+        data:
+          key: ok
+
+  # 投影仪关机并开灯
+  projector_shutdown:
+    alias: "投影仪关机流程"
+    sequence:
+      - service: media_player.turn_off
+        target:
+          entity_id: media_player.ke_ting_tou_ying_yi
+      - delay: "00:00:02"
+      - service: light.turn_on
+        target:
+          entity_id: light.ke_ting
+        data:
+          brightness: 128  # 50% 亮度

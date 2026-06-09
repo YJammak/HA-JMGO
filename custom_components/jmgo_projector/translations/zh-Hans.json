@@ -1,0 +1,44 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "JMGO 坚果投影仪设置",
+        "description": "请输入投影仪的连接信息",
+        "data": {
+          "host": "IP 地址",
+          "port": "端口",
+          "name": "设备名称"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "无法连接到投影仪",
+      "unknown": "未知错误"
+    },
+    "abort": {
+      "already_configured": "该投影仪已配置"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "JMGO 坚果投影仪选项",
+        "description": "修改投影仪的连接设置。当前配置：IP {current_host}，端口 {current_port}",
+        "data": {
+          "host": "IP 地址",
+          "port": "端口",
+          "name": "设备名称"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "无法使用新设置连接到投影仪"
+    }
+  },
+  "state": {
+    "_": {
+      "on": "开",
+      "off": "关"
+    }
+  }
+}
