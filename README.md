@@ -189,7 +189,7 @@ MIT License
 
 ## 🙏 致谢
 
-感谢原始 JMGO 投影仪控制器的逆向工程工作。
+本项目基于 [XvZipo/JMGO-projector-controller](https://github.com/XvZipo/JMGO-projector-controller) 改造而成，感谢原作者的逆向工程工作。
 
 ---
 
