@@ -1,0 +1,192 @@
+# JMGO 投影仪遥控器 - Lovelace 卡片配置
+# 将此配置添加到你的仪表板中
+
+# 方式 1：使用 Button Card（推荐）
+type: vertical-stack
+cards:
+  # 标题
+  - type: markdown
+    content: |
+      ## 🎬 客厅投影仪遥控器
+
+  # 电源键
+  - type: horizontal-stack
+    cards:
+      - type: button
+        entity: button.ke_ting_tou_ying_yi_power
+        name: 电源
+        icon: mdi:power
+        show_state: false
+
+  # 方向键区域
+  - type: horizontal-stack
+    cards:
+      - type: button
+        entity: button.ke_ting_tou_ying_yi_left
+        name: 左
+        icon: mdi:chevron-left
+        show_state: false
+      - type: button
+        entity: button.ke_ting_tou_ying_yi_ok
+        name: 确认
+        icon: mdi:checkbox-marked-circle
+        show_state: false
+      - type: button
+        entity: button.ke_ting_tou_ying_yi_right
+        name: 右
+        icon: mdi:chevron-right
+        show_state: false
+
+  # 上下键
+  - type: horizontal-stack
+    cards:
+      - type: button
+        entity: button.ke_ting_tou_ying_yi_up
+        name: 上
+        icon: mdi:chevron-up
+        show_state: false
+      - type: button
+        entity: button.ke_ting_tou_ying_yi_down
+        name: 下
+        icon: mdi:chevron-down
+        show_state: false
+
+  # 功能键
+  - type: horizontal-stack
+    cards:
+      - type: button
+        entity: button.ke_ting_tou_ying_yi_return
+        name: 返回
+        icon: mdi:arrow-left
+        show_state: false
+      - type: button
+        entity: button.ke_ting_tou_ying_yi_menu
+        name: 菜单
+        icon: mdi:menu
+        show_state: false
+      - type: button
+        entity: button.ke_ting_tou_ying_yi_settings
+        name: 设置
+        icon: mdi:cog
+        show_state: false
+
+# 方式 2：使用 Picture Elements（更美观的遥控器界面）
+type: picture-elements
+image: /local/projector-background.png  # 需要自己准备背景图
+elements:
+  # 电源键
+  - type: state-icon
+    entity: button.ke_ting_tou_ying_yi_power
+    icon: mdi:power
+    style:
+      top: 10%
+      left: 50%
+      '--mdc-icon-size': 40px
+      '--mdc-icon-button-size': 60px
+
+  # 确认键
+  - type: state-icon
+    entity: button.ke_ting_tou_ying_yi_ok
+    icon: mdi:checkbox-marked-circle
+    style:
+      top: 50%
+      left: 50%
+      '--mdc-icon-size': 30px
+
+  # 上
+  - type: state-icon
+    entity: button.ke_ting_tou_ying_yi_up
+    icon: mdi:chevron-up
+    style:
+      top: 35%
+      left: 50%
+
+  # 下
+  - type: state-icon
+    entity: button.ke_ting_tou_ying_yi_down
+    icon: mdi:chevron-down
+    style:
+      top: 65%
+      left: 50%
+
+  # 左
+  - type: state-icon
+    entity: button.ke_ting_tou_ying_yi_left
+    icon: mdi:chevron-left
+    style:
+      top: 50%
+      left: 35%
+
+  # 右
+  - type: state-icon
+    entity: button.ke_ting_tou_ying_yi_right
+    icon: mdi:chevron-right
+    style:
+      top: 50%
+      left: 65%
+
+  # 返回
+  - type: state-icon
+    entity: button.ke_ting_tou_ying_yi_return
+    icon: mdi:arrow-left
+    style:
+      top: 80%
+      left: 25%
+
+  # 菜单
+  - type: state-icon
+    entity: button.ke_ting_tou_ying_yi_menu
+    icon: mdi:menu
+    style:
+      top: 80%
+      left: 50%
+
+  # 设置
+  - type: state-icon
+    entity: button.ke_ting_tou_ying_yi_settings
+    icon: mdi:cog
+    style:
+      top: 80%
+      left: 75%
+
+# 方式 3：使用 Glance 卡片（简洁视图）
+type: glance
+title: 投影仪遥控
+columns: 5
+show_name: true
+show_icon: true
+entities:
+  - entity: button.ke_ting_tou_ying_yi_power
+    name: 电源
+    icon: mdi:power
+  - entity: button.ke_ting_tou_ying_yi_up
+    name: 上
+    icon: mdi:chevron-up
+  - entity: button.ke_ting_tou_ying_yi_ok
+    name: 确认
+    icon: mdi:checkbox-marked-circle
+  - entity: button.ke_ting_tou_ying_yi_down
+    name: 下
+    icon: mdi:chevron-down
+  - entity: button.ke_ting_tou_ying_yi_return
+    name: 返回
+    icon: mdi:arrow-left
+
+---
+
+# 使用 HACS 的 custom:button-card（最美观）
+# 需要先安装 https://github.com/custom-cards/button-card
+
+type: custom:button-card
+entity: button.ke_ting_tou_ying_yi_power
+name: 电源
+icon: mdi:power
+color: red
+size: 40%
+styles:
+  card:
+    - width: 100px
+    - height: 100px
+  icon:
+    - width: 50px
+    - height: 50px

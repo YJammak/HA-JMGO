@@ -87,13 +87,14 @@ class JMGOProjectorMediaPlayer(MediaPlayerEntity):
         return self._attr_volume_level
 
     async def _send_command(self, commands: list[bytes], delay: float = 0.1) -> None:
-        """Send command to projector."""
+        """Send command to projector (press + release)."""
         try:
             reader, writer = await asyncio.wait_for(
                 asyncio.open_connection(self._host, self._port),
                 timeout=5
             )
 
+            # Send all command parts (press then release)
             for cmd in commands:
                 writer.write(cmd)
                 await asyncio.sleep(delay)
@@ -104,14 +105,14 @@ class JMGOProjectorMediaPlayer(MediaPlayerEntity):
             _LOGGER.error("Error sending command to projector: %s", err)
 
     async def async_turn_on(self) -> None:
-        """Turn the media player on."""
-        await self._send_command(COMMANDS["power_on"])
+        """Turn the media player on (send power toggle)."""
+        await self._send_command(COMMANDS["power"])
         self._attr_state = MediaPlayerState.ON
         self.async_write_ha_state()
 
     async def async_turn_off(self) -> None:
-        """Turn the media player off."""
-        await self._send_command(COMMANDS["power_off"])
+        """Turn the media player off (send power toggle)."""
+        await self._send_command(COMMANDS["power"])
         self._attr_state = MediaPlayerState.OFF
         self.async_write_ha_state()
 
@@ -158,34 +159,17 @@ class JMGOProjectorMediaPlayer(MediaPlayerEntity):
 
     async def async_send_key(self, key: str) -> None:
         """Send a key press to the projector."""
-        key_map = {
-            "power": ("power_on", None),
-            "return": ("return_on", "return_off"),
-            "setting": ("setting_on", "setting_off"),
-            "ok": ("ok_on", "ok_off"),
-            "up": ("up_on", "up_off"),
-            "down": ("down_on", "down_off"),
-            "left": ("left_on", "left_off"),
-            "right": ("right_on", "right_off"),
-            "option": ("option_on", "option_off"),
-            "mongo": ("mongo_on", "mongo_off"),
-        }
-
-        if key not in key_map:
+        if key not in COMMANDS:
             _LOGGER.error("Unknown key: %s", key)
             return
 
-        on_cmd, off_cmd = key_map[key]
+        # All keys use the same pattern: press + release
+        await self._send_command(COMMANDS[key])
 
-        if off_cmd is None:
-            # Power toggle - just send on command
-            if key == "power":
-                await self._send_command(COMMANDS[on_cmd])
-                if self._attr_state == MediaPlayerState.OFF:
-                    self._attr_state = MediaPlayerState.ON
-                else:
-                    self._attr_state = MediaPlayerState.OFF
-                self.async_write_ha_state()
-        else:
-            # Send press + release
-            await self._send_command(COMMANDS[on_cmd] + COMMANDS[off_cmd])
+        # Update state for power key
+        if key == "power":
+            if self._attr_state == MediaPlayerState.OFF:
+                self._attr_state = MediaPlayerState.ON
+            else:
+                self._attr_state = MediaPlayerState.OFF
+            self.async_write_ha_state()

@@ -11,7 +11,7 @@ from .const import DOMAIN, DEFAULT_PORT
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS = ["media_player"]
+PLATFORMS = ["media_player", "button"]
 
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
